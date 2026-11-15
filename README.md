@@ -229,10 +229,11 @@ PASSED [100%]
 ---
 
 ### Step 12: Configure Evidently Tool & Monitor
-Configured in [`evidently_monitor.py`](evidently_monitor.py):
-1. Generates reference (baseline) and current (production) datasets with simulated drift on `feature_1`.
-2. Computes **Data Drift** and **Data Summary** metric presets.
-3. Exports an interactive dashboard: `evidently_report.html`.
+Configured in [`evidently_monitor.py`](evidently_monitor.py) using the standard **Diabetes Disease Progression Dataset** from `scikit-learn` (`sklearn.datasets.load_diabetes`):
+1. Loads 442 patient records with 10 physiological and biomarker diagnostic features: `age`, `sex`, `bmi`, `bp`, and 6 blood serum measurements (`s1` - `s6`), along with quantitative disease progression (`target`).
+2. Splits into baseline reference cohort (221 patients) and incoming production cohort (221 patients).
+3. Evaluates **Data Drift** and **Data Summary** metric presets using Evidently AI.
+4. Generates an interactive visual HTML dashboard: `evidently_report.html`.
 
 **Run in CMD:**
 ```cmd
@@ -241,11 +242,13 @@ python evidently_monitor.py
 *Output:*
 ```text
 ==================================================
-  Evidently AI Tool - Data & Model Monitoring     
+  Evidently AI Tool - Disease Data Monitoring     
+  Dataset: Scikit-Learn Diabetes Progression      
 ==================================================
-[INFO] Reference dataset shape: (150, 4)
-[INFO] Current (production) dataset shape: (150, 4)
-[INFO] Computing Data Drift and Summary metrics...
+[INFO] Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'target']
+[INFO] Reference cohort (baseline): 221 patient records
+[INFO] Current cohort (production): 221 patient records
+[INFO] Computing Data Drift and Data Summary metrics...
 [SUCCESS] Evidently report generated successfully: evidently_report.html
 [REPORT LOCATION] C:\Users\Pankaj\Documents\Internal POE\evidently_report.html
 ==================================================

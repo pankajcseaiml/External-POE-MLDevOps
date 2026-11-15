@@ -1,52 +1,46 @@
 # evidently_monitor.py
 """
 Evidently AI Monitoring Tool Configuration
-Step 12: Evaluates data drift and data quality between reference and current datasets,
-generates an interactive HTML dashboard, and logs drift metrics.
+Step 12: Uses the real-world Diabetes Disease Progression dataset from scikit-learn,
+evaluates data drift and data quality between baseline and production patient cohorts,
+and generates an interactive HTML dashboard.
 """
 import os
 import sys
-import numpy as np
 import pandas as pd
+from sklearn.datasets import load_diabetes
 
 
-def generate_sample_data(n_samples: int = 150):
+def load_disease_dataset():
     """
-    Generate baseline (reference) and production (current) datasets.
-    Simulates production data drift on feature_1 to demonstrate monitoring capabilities.
+    Load the standard medical Diabetes progression dataset from scikit-learn.
+    Features include: age, sex, bmi, bp, and 6 blood serum measurements (s1-s6).
+    Splits into reference (baseline cohort) and current (incoming production cohort).
     """
-    np.random.seed(42)
+    diabetes = load_diabetes(as_frame=True)
+    df = diabetes.frame
 
-    # Reference dataset (training / baseline distribution)
-    reference_df = pd.DataFrame({
-        "feature_1": np.random.normal(loc=10.0, scale=2.0, size=n_samples),
-        "feature_2": np.random.normal(loc=50.0, scale=5.0, size=n_samples),
-        "category": np.random.choice(["A", "B", "C"], size=n_samples, p=[0.5, 0.3, 0.2]),
-        "prediction": np.random.choice([0, 1], size=n_samples)
-    })
-
-    # Current dataset (production distribution with simulated drift in feature_1)
-    current_df = pd.DataFrame({
-        "feature_1": np.random.normal(loc=14.5, scale=3.0, size=n_samples),  # Drifted mean
-        "feature_2": np.random.normal(loc=50.2, scale=5.1, size=n_samples),  # Stable
-        "category": np.random.choice(["A", "B", "C"], size=n_samples, p=[0.2, 0.4, 0.4]),  # Shifted categories
-        "prediction": np.random.choice([0, 1], size=n_samples)
-    })
+    # Split dataset into baseline reference cohort and current production cohort
+    midpoint = len(df) // 2
+    reference_df = df.iloc[:midpoint].copy().reset_index(drop=True)
+    current_df = df.iloc[midpoint:].copy().reset_index(drop=True)
 
     return reference_df, current_df
 
 
 def run_evidently_monitoring(output_html: str = "evidently_report.html"):
     """
-    Run Evidently drift and summary metrics report and save interactive HTML report.
+    Run Evidently drift and summary metrics report and save interactive HTML dashboard.
     """
     print("==================================================")
-    print("  Evidently AI Tool - Data & Model Monitoring     ")
+    print("  Evidently AI Tool - Disease Data Monitoring     ")
+    print("  Dataset: Scikit-Learn Diabetes Progression      ")
     print("==================================================")
 
-    ref_data, curr_data = generate_sample_data()
-    print(f"[INFO] Reference dataset shape: {ref_data.shape}")
-    print(f"[INFO] Current (production) dataset shape: {curr_data.shape}")
+    ref_data, curr_data = load_disease_dataset()
+    print(f"[INFO] Features: {list(ref_data.columns)}")
+    print(f"[INFO] Reference cohort (baseline): {ref_data.shape[0]} patient records")
+    print(f"[INFO] Current cohort (production): {curr_data.shape[0]} patient records")
 
     # Import Report and Presets with compatibility fallback
     try:
@@ -63,9 +57,8 @@ def run_evidently_monitoring(output_html: str = "evidently_report.html"):
             from evidently.legacy.metric_preset import DataDriftPreset, DataQualityPreset
             presets = [DataDriftPreset(), DataQualityPreset()]
 
-    print("[INFO] Computing Data Drift and Summary metrics...")
+    print("[INFO] Computing Data Drift and Data Summary metrics...")
     report = Report(metrics=presets)
-
     report_result = report.run(reference_data=ref_data, current_data=curr_data)
 
     # Save to interactive HTML
@@ -86,4 +79,3 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         report_file = sys.argv[1]
     run_evidently_monitoring(report_file)
-
