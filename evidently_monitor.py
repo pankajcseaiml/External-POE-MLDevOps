@@ -9,6 +9,8 @@ import os
 import sys
 import pandas as pd
 from sklearn.datasets import load_diabetes
+from evidently import Report
+from evidently.presets import DataDriftPreset, DataSummaryPreset
 
 
 def load_disease_dataset():
@@ -42,30 +44,13 @@ def run_evidently_monitoring(output_html: str = "evidently_report.html"):
     print(f"[INFO] Reference cohort (baseline): {ref_data.shape[0]} patient records")
     print(f"[INFO] Current cohort (production): {curr_data.shape[0]} patient records")
 
-    # Import Report and Presets with compatibility fallback
-    try:
-        from evidently import Report
-        from evidently.presets import DataDriftPreset, DataSummaryPreset
-        presets = [DataDriftPreset(), DataSummaryPreset()]
-    except (ImportError, AttributeError):
-        try:
-            from evidently.report import Report
-            from evidently.metric_preset import DataDriftPreset, DataQualityPreset
-            presets = [DataDriftPreset(), DataQualityPreset()]
-        except ImportError:
-            from evidently.legacy.report import Report
-            from evidently.legacy.metric_preset import DataDriftPreset, DataQualityPreset
-            presets = [DataDriftPreset(), DataQualityPreset()]
-
     print("[INFO] Computing Data Drift and Data Summary metrics...")
+    presets = [DataDriftPreset(), DataSummaryPreset()]
     report = Report(metrics=presets)
     report_result = report.run(reference_data=ref_data, current_data=curr_data)
 
-    # Save to interactive HTML
-    if hasattr(report_result, "save_html"):
-        report_result.save_html(output_html)
-    elif hasattr(report, "save_html"):
-        report.save_html(output_html)
+    # Save to interactive HTML dashboard
+    report_result.save_html(output_html)
 
     print(f"[SUCCESS] Evidently report generated successfully: {output_html}")
     full_path = os.path.abspath(output_html)
