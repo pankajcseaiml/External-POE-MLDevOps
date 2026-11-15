@@ -23,7 +23,7 @@ pipeline {
 
         stage('Run Pytest') {
             steps {
-                echo 'Running Pytest test suite for Multiplication & FastAPI...'
+                echo 'Running Pytest test suite for Addition, Subtraction, Multiplication, Division...'
                 bat '%PYTHON% -m pytest -p no:dash -v tests/'
             }
         }
@@ -35,11 +35,18 @@ pipeline {
             }
         }
 
+        stage('MLflow Tracking') {
+            steps {
+                echo 'Logging arithmetic runs to MLflow...'
+                bat '%PYTHON% train_and_track_mlflow.py'
+            }
+        }
+
         stage('Docker Build and Run') {
             steps {
                 echo 'Building and running Docker container...'
-                bat 'docker build -t multiplication-app:latest .'
-                bat 'docker run --rm multiplication-app:latest'
+                bat 'docker build -t arithmetic-app:latest .'
+                bat 'docker run --rm arithmetic-app:latest'
             }
         }
     }
@@ -49,7 +56,7 @@ pipeline {
             echo 'Jenkins pipeline completed.'
         }
         success {
-            echo 'Multiplication Project CI/CD Pipeline passed successfully!'
+            echo 'Arithmetic Operations CI/CD Pipeline passed successfully!'
         }
         failure {
             echo 'Pipeline failed. Check stage logs above.'

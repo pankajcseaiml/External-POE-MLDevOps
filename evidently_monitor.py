@@ -1,25 +1,32 @@
 """
-Evidently AI Monitoring Tool for Multiplication Program.
-Monitors input numbers (num1, num2) and their product for data drift.
+Evidently AI Monitoring Tool for Arithmetic Operations:
+Addition, Subtraction, Multiplication, and Division.
+Monitors input numbers (num1, num2) and all 4 operation results for data drift.
 """
 import numpy as np
 import pandas as pd
 from evidently import Report
 from evidently.presets import DataDriftPreset, DataSummaryPreset
 
-from main import multiply
+from main import add, subtract, multiply, divide
 
 
 def generate_data(n_samples: int, low: float, high: float) -> pd.DataFrame:
     np.random.seed(42)
     num1 = np.random.uniform(low, high, n_samples)
-    num2 = np.random.uniform(low, high, n_samples)
-    products = [multiply(n1, n2) for n1, n2 in zip(num1, num2)]
-    return pd.DataFrame({"num1": num1, "num2": num2, "product": products})
+    num2 = np.random.uniform(low + 1.0, high + 1.0, n_samples)  # avoid 0 for division
+    return pd.DataFrame({
+        "num1": num1,
+        "num2": num2,
+        "addition": [add(n1, n2) for n1, n2 in zip(num1, num2)],
+        "subtraction": [subtract(n1, n2) for n1, n2 in zip(num1, num2)],
+        "multiplication": [multiply(n1, n2) for n1, n2 in zip(num1, num2)],
+        "division": [divide(n1, n2) for n1, n2 in zip(num1, num2)],
+    })
 
 
 def main():
-    print("Generating Multiplication datasets for Evidently AI...")
+    print("Generating Arithmetic Operations datasets for Evidently AI...")
     reference_data = generate_data(100, 1.0, 50.0)
     current_data = generate_data(100, 20.0, 100.0)
 

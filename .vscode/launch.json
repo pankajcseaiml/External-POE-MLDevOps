@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Multiplication Program",
+            "name": "Python: Arithmetic Program (Add, Sub, Mul, Div)",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
@@ -39,6 +39,13 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/evidently_monitor.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "MLflow: Run Tracking",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/train_and_track_mlflow.py",
             "console": "integratedTerminal"
         }
     ]
