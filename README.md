@@ -7,7 +7,7 @@ A minimalist Python project that accepts two numbers and displays their **Additi
 ## Project Structure (Minimal Files)
 
 ```text
-Internal-POE/
+External-POE/
 ├── main.py              # Addition program (CLI + FastAPI service)
 ├── evidently_monitor.py # Evidently AI data drift monitoring script
 ├── requirements.txt     # Python dependencies
