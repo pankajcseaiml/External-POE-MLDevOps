@@ -9,6 +9,7 @@ A minimalist Python project that accepts two numbers and displays their **Multip
 ```text
 External-POE/
 ├── main.py              # Multiplication program (CLI + FastAPI service)
+├── train_and_track_mlflow.py # MLflow experiment tracking script
 ├── evidently_monitor.py # Evidently AI data drift monitoring script
 ├── requirements.txt     # Python dependencies
 ├── Dockerfile           # Docker container configuration
@@ -71,6 +72,10 @@ start evidently_report.html
 
 ## 5. MLflow Experiment Tracking
 
+* **Run Experiment Tracking Script:**
+  ```cmd
+  python train_and_track_mlflow.py
+  ```
 * **Start MLflow UI:**
   ```cmd
   mlflow ui --port 5000

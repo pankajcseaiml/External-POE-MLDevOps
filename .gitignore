@@ -8,6 +8,10 @@ __pycache__/
 # Generated monitoring reports
 *.html
 
+# MLflow tracking
+mlruns/
+mlflow.db
+
 # Windows OS files
 Thumbs.db
 Desktop.ini
