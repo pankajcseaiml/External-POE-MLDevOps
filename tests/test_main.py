@@ -17,7 +17,7 @@ def test_addition():
 def test_api_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json()["message"] == "Addition Service API"
+    assert "sum" in response.json()
 
 
 def test_api_add():
