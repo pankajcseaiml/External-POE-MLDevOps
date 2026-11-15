@@ -1,37 +1,13 @@
-# Python bytecode & cache
+# Python bytecode
 __pycache__/
-*.py[cod]
-*$py.class
 *.pyc
 
-# Pytest & testing artifacts
+# Pytest cache
 .pytest_cache/
-.coverage
-htmlcov/
 
-# MLflow tracking runs & artifacts
-mlruns/
-mlartifacts/
-*.db
-mlflow.db
-
-# Virtual environments
-venv/
-env/
-.env
-
-# Monitoring & HTML generated reports
+# Generated monitoring reports
 *.html
-*.log
 
-# Windows & OS temporary files
-*.reg
-*.tmp
-*.bak
+# Windows OS files
 Thumbs.db
 Desktop.ini
-
-# VS Code (preserve launch and settings, ignore state)
-.vscode/*
-!.vscode/settings.json
-!.vscode/launch.json

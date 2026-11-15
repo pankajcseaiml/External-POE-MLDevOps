@@ -2,29 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Run Multiplication Program",
+            "name": "Python: Addition Program",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Run FastAPI Server (uvicorn)",
+            "name": "FastAPI: Uvicorn Server",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
                 "main:app",
-                "--host",
-                "0.0.0.0",
+                "--reload",
                 "--port",
-                "8000",
-                "--reload"
+                "8000"
             ],
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Run Pytest Tests",
+            "name": "Pytest: Run Tests",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
@@ -32,13 +30,12 @@
                 "-p",
                 "no:dash",
                 "-v",
-                "-s",
-                "tests"
+                "tests/"
             ],
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Run Evidently Monitor",
+            "name": "Evidently: Run Monitor",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/evidently_monitor.py",
