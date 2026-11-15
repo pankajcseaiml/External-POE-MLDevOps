@@ -9,6 +9,10 @@ __pycache__/
 .coverage
 htmlcov/
 
+# MLflow tracking runs & artifacts
+mlruns/
+mlartifacts/
+
 # Virtual environments
 venv/
 env/

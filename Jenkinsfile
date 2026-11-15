@@ -23,8 +23,15 @@ pipeline {
 
         stage('Run Pytest') {
             steps {
-                echo 'Running Pytest test case for hello.py...'
+                echo 'Running Pytest test cases...'
                 bat 'python -m pytest -p no:dash -v -s tests/test_hello.py'
+            }
+        }
+
+        stage('MLflow Experiment Tracking') {
+            steps {
+                echo 'Training baseline model and logging metrics & artifacts to MLflow...'
+                bat 'python train_and_track_mlflow.py'
             }
         }
 

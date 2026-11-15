@@ -1,13 +1,14 @@
 # MLOps & DevOps End-to-End Pipeline Assignment
 
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.13-blue.svg)](https://www.python.org/)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking%20%26%20Registry-0194E2.svg)](https://mlflow.org/)
 [![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-red.svg)](https://www.jenkins.io/)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg)](https://www.docker.com/)
 [![Pytest](https://img.shields.io/badge/Pytest-Unit%20Tested-0A9EDC.svg)](https://docs.pytest.org/)
 [![Evidently AI](https://img.shields.io/badge/Evidently%20AI-Monitoring-purple.svg)](https://www.evidentlyai.com/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Internal--POE--MLDevOps-success.svg)](https://github.com/pankajcseaiml/Internal-POE-MLDevOps)
 
-An end-to-end beginner MLOps/DevOps project demonstrating modular application development (`hello.py`), VS Code workspace configuration, GitHub version control, Jenkins declarative CI/CD automation, Docker containerization with a lightweight base image, Pytest unit testing, and Evidently AI data drift and model quality monitoring.
+An end-to-end beginner MLOps/DevOps project demonstrating modular application development (`hello.py`), VS Code workspace configuration, GitHub version control, Jenkins declarative CI/CD automation, MLflow experiment tracking & model logging, Docker containerization with a lightweight base image, Pytest unit testing, and Evidently AI data drift and model quality monitoring.
 
 **GitHub Repository:** [https://github.com/pankajcseaiml/Internal-POE-MLDevOps](https://github.com/pankajcseaiml/Internal-POE-MLDevOps)
 
@@ -18,17 +19,18 @@ An end-to-end beginner MLOps/DevOps project demonstrating modular application de
 ```text
 Internal POE/
 ├── .vscode/
-│   ├── settings.json         # VS Code workspace settings & pytest test discovery
-│   └── launch.json           # VS Code debug & run configurations
+│   ├── settings.json            # VS Code workspace settings & pytest test discovery
+│   └── launch.json              # VS Code debug & run configurations
 ├── tests/
-│   └── test_hello.py         # Pytest unit test case (Step 11)
-├── Dockerfile                # Lightweight Python container image (Steps 9 & 10)
-├── hello.py                  # Single-file core application (Step 2)
-├── evidently_monitor.py      # Evidently AI drift and quality monitoring (Step 12)
-├── Jenkinsfile               # Declarative Jenkins CI/CD automation (Steps 5, 6, 7)
-├── requirements.txt          # Production dependencies
-├── .gitignore                # Clean Git exclusion rules
-└── README.md                 # Complete documentation & execution guide
+│   └── test_hello.py            # Pytest test cases (Step 11 & MLflow test)
+├── Dockerfile                   # Lightweight Python container image (Steps 9 & 10)
+├── hello.py                     # Single-file core application (Step 2)
+├── train_and_track_mlflow.py    # MLflow experiment tracking & model logging
+├── evidently_monitor.py         # Evidently AI drift and quality monitoring (Step 12)
+├── Jenkinsfile                  # Declarative Jenkins CI/CD automation (Steps 5, 6, 7)
+├── requirements.txt             # Production dependencies (MLflow, Evidently, Pytest)
+├── .gitignore                   # Clean Git exclusion rules
+└── README.md                    # Complete documentation & execution guide
 ```
 
 ---
@@ -40,12 +42,12 @@ Internal POE/
 │  hello.py   │ ────> │  Git/GitHub  │ ────> │ Jenkins (CI/CD) │
 └─────────────┘       └──────────────┘       └────────┬────────┘
                                                       │
-         ┌───────────────────┬────────────────────────┴─────────────────────┐
-         ▼                   ▼                                              ▼
- ┌───────────────┐   ┌──────────────────────────────┐              ┌────────────────┐
- │ Pytest Test   │   │ Evidently AI Data Monitoring │              │ Docker Build   │
- │ (Unit verify) │   │ (Drift & Summary Dashboard)  │              │ & Run Container│
- └───────────────┘   └──────────────────────────────┘              └────────────────┘
+         ┌───────────────────┬────────────────────────┼─────────────────────┐
+         ▼                   ▼                        ▼                     ▼
+ ┌───────────────┐   ┌─────────────────┐   ┌──────────────────────┐  ┌────────────────┐
+ │ Pytest Suite  │   │ MLflow Tracking │   │ Evidently Monitoring │  │ Docker Build   │
+ │ (Unit verify) │   │ (Metrics/Model) │   │ (Drift & Summary)    │  │ & Run Container│
+ └───────────────┘   └─────────────────┘   └──────────────────────┘  └────────────────┘
 ```
 
 ---
@@ -196,22 +198,10 @@ Hello MLOps
 
 ---
 
-### Step 11: Configure Pytest and Print 1 Test Case
+### Step 11: Configure Pytest and Print Test Cases
 Test file located at [`tests/test_hello.py`](tests/test_hello.py):
-```python
-from hello import get_message, main
-
-def test_hello_mlops_message(capsys):
-    """Test 1: Verify get_message returns expected greeting and main prints it."""
-    message = get_message()
-    print(f"\n[PYTEST OUTPUT] get_message() returned: '{message}'")
-    assert message == "Hello MLOps"
-
-    main()
-    captured = capsys.readouterr()
-    print(f"[PYTEST OUTPUT] captured stdout from main(): '{captured.out.strip()}'")
-    assert "Hello MLOps" in captured.out
-```
+1. **`test_hello_mlops_message`:** Verifies `hello.py` logic and stdout.
+2. **`test_mlflow_training_and_tracking`:** Verifies MLflow model training, metric computation, and artifact logging.
 
 **Run in CMD:**
 ```cmd
@@ -219,11 +209,29 @@ python -m pytest -p no:dash -v -s tests/test_hello.py
 ```
 *Output:*
 ```text
-tests/test_hello.py::test_hello_mlops_message 
-[PYTEST OUTPUT] get_message() returned: 'Hello MLOps'
-[PYTEST OUTPUT] captured stdout from main(): 'Hello MLOps'
-PASSED [100%]
-============================== 1 passed in 0.02s ==============================
+tests/test_hello.py::test_hello_mlops_message PASSED
+tests/test_hello.py::test_mlflow_training_and_tracking PASSED
+============================== 2 passed in 0.82s ==============================
+```
+
+---
+
+### Step 11b: MLflow Model Training & Experiment Tracking
+Configured in [`train_and_track_mlflow.py`](train_and_track_mlflow.py):
+* Trains a Ridge Regression baseline model on the Diabetes dataset.
+* Automatically logs hyperparameters (`alpha`, `model_type`, `test_size`).
+* Automatically logs evaluation metrics (`mse`, `rmse`, `mae`, `r2_score`).
+* Logs the trained model artifact to MLflow.
+
+**Run in CMD:**
+```cmd
+python train_and_track_mlflow.py
+```
+
+**Launch MLflow Web UI:**
+```cmd
+mlflow ui
+start http://localhost:5000
 ```
 
 ---
