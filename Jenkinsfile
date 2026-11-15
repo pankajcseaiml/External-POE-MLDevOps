@@ -23,7 +23,7 @@ pipeline {
 
         stage('Run Pytest') {
             steps {
-                echo 'Running Pytest test suite for Addition & FastAPI...'
+                echo 'Running Pytest test suite for Multiplication & FastAPI...'
                 bat '%PYTHON% -m pytest -p no:dash -v tests/'
             }
         }
@@ -38,8 +38,8 @@ pipeline {
         stage('Docker Build and Run') {
             steps {
                 echo 'Building and running Docker container...'
-                bat 'docker build -t addition-app:latest .'
-                bat 'docker run --rm addition-app:latest'
+                bat 'docker build -t multiplication-app:latest .'
+                bat 'docker run --rm multiplication-app:latest'
             }
         }
     }
@@ -49,7 +49,7 @@ pipeline {
             echo 'Jenkins pipeline completed.'
         }
         success {
-            echo 'Addition Project CI/CD Pipeline passed successfully!'
+            echo 'Multiplication Project CI/CD Pipeline passed successfully!'
         }
         failure {
             echo 'Pipeline failed. Check stage logs above.'

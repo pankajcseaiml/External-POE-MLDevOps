@@ -1,25 +1,25 @@
 """
-Evidently AI Monitoring Tool for Addition Program.
-Monitors input numbers (num1, num2) and their sum for data drift.
+Evidently AI Monitoring Tool for Multiplication Program.
+Monitors input numbers (num1, num2) and their product for data drift.
 """
 import numpy as np
 import pandas as pd
 from evidently import Report
 from evidently.presets import DataDriftPreset, DataSummaryPreset
 
-from main import add
+from main import multiply
 
 
 def generate_data(n_samples: int, low: float, high: float) -> pd.DataFrame:
     np.random.seed(42)
     num1 = np.random.uniform(low, high, n_samples)
     num2 = np.random.uniform(low, high, n_samples)
-    sums = [add(n1, n2) for n1, n2 in zip(num1, num2)]
-    return pd.DataFrame({"num1": num1, "num2": num2, "sum": sums})
+    products = [multiply(n1, n2) for n1, n2 in zip(num1, num2)]
+    return pd.DataFrame({"num1": num1, "num2": num2, "product": products})
 
 
 def main():
-    print("Generating Addition datasets for Evidently AI...")
+    print("Generating Multiplication datasets for Evidently AI...")
     reference_data = generate_data(100, 1.0, 50.0)
     current_data = generate_data(100, 20.0, 100.0)
 

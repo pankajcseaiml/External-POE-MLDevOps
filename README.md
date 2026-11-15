@@ -1,6 +1,6 @@
-# Python Addition Program with FastAPI, Jenkins, Pytest & Evidently
+# Python Multiplication Program with FastAPI, Jenkins, Pytest, Evidently & MLflow
 
-A minimalist Python project that accepts two numbers and displays their **Addition**, integrated with **FastAPI**, **Jenkins**, **Pytest**, and the **Evidently tool**.
+A minimalist Python project that accepts two numbers and displays their **Multiplication**, integrated with **FastAPI**, **Jenkins**, **Pytest**, **Evidently AI**, and **MLflow**.
 
 ---
 
@@ -8,7 +8,7 @@ A minimalist Python project that accepts two numbers and displays their **Additi
 
 ```text
 External-POE/
-├── main.py              # Addition program (CLI + FastAPI service)
+├── main.py              # Multiplication program (CLI + FastAPI service)
 ├── evidently_monitor.py # Evidently AI data drift monitoring script
 ├── requirements.txt     # Python dependencies
 ├── Dockerfile           # Docker container configuration
@@ -20,7 +20,7 @@ External-POE/
 
 ---
 
-## 1. Run Python Addition (CLI)
+## 1. Run Python Multiplication (CLI)
 
 * **Interactive prompt:**
   ```cmd
@@ -28,7 +28,7 @@ External-POE/
   ```
 * **Command line arguments:**
   ```cmd
-  python main.py 15 25
+  python main.py 6 7
   ```
 
 ---
@@ -43,7 +43,7 @@ External-POE/
   [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 * **API Endpoint:**
   ```cmd
-  curl "http://127.0.0.1:8000/add?num1=15&num2=25"
+  curl "http://127.0.0.1:8000/multiply?num1=6&num2=7"
   ```
 
 ---
@@ -58,7 +58,7 @@ python -m pytest -p no:dash -v tests/
 
 ## 4. Run Evidently Tool
 
-Generate data drift and summary report for addition inputs and outputs:
+Generate data drift and summary report for multiplication inputs and outputs:
 ```cmd
 python evidently_monitor.py
 ```
@@ -69,20 +69,31 @@ start evidently_report.html
 
 ---
 
-## 5. Docker Container
+## 5. MLflow Experiment Tracking
+
+* **Start MLflow UI:**
+  ```cmd
+  mlflow ui --port 5000
+  ```
+* **Open Dashboard:**
+  [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+---
+
+## 6. Docker Container
 
 * **Build image:**
   ```cmd
-  docker build -t addition-app:latest .
+  docker build -t multiplication-app:latest .
   ```
 * **Run container:**
   ```cmd
-  docker run --rm addition-app:latest
+  docker run --rm multiplication-app:latest
   ```
 
 ---
 
-## 6. Jenkins CI/CD Pipeline
+## 7. Jenkins CI/CD Pipeline
 
 * Jenkins URL: `http://localhost:8081`
 * Automated stages:
