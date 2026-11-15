@@ -2,18 +2,35 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Run hello.py",
+            "name": "Python: Run Multiplication Program",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/hello.py",
+            "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Run Pytest",
+            "name": "Python: Run FastAPI Server (uvicorn)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "main:app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--reload"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Run Pytest Tests",
             "type": "debugpy",
             "request": "launch",
             "module": "pytest",
             "args": [
+                "-p",
+                "no:dash",
                 "-v",
                 "-s",
                 "tests"
@@ -29,4 +46,3 @@
         }
     ]
 }
-

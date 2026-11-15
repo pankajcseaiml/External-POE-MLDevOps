@@ -1,12 +1,18 @@
-# Step 9: Pull lightweight Python base image
+# Step 9: Lightweight Python base image
 FROM python:3.11-slim
 
-# Set working directory inside container
+# Set container working directory
 WORKDIR /app
 
-# Step 10: Add hello.py into Docker container
-COPY hello.py .
+# Install project dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run hello.py when container starts
+# Step 10: Copy multiplication application code
+COPY main.py hello.py ./
+
+# Expose FastAPI web service port
+EXPOSE 8000
+
+# Default execution: run multiplication program
 CMD ["python", "hello.py"]
-

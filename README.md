@@ -1,286 +1,205 @@
-# MLOps & DevOps End-to-End Pipeline Assignment
+# Multiplication Program with FastAPI, Jenkins, Pytest, Docker & Evidently AI
 
-[![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.13-blue.svg)](https://www.python.org/)
-[![MLflow](https://img.shields.io/badge/MLflow-Tracking%20%26%20Registry-0194E2.svg)](https://mlflow.org/)
-[![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-red.svg)](https://www.jenkins.io/)
-[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg)](https://www.docker.com/)
-[![Pytest](https://img.shields.io/badge/Pytest-Unit%20Tested-0A9EDC.svg)](https://docs.pytest.org/)
-[![Evidently AI](https://img.shields.io/badge/Evidently%20AI-Monitoring-purple.svg)](https://www.evidentlyai.com/)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Internal--POE--MLDevOps-success.svg)](https://github.com/pankajcseaiml/Internal-POE-MLDevOps)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.13-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD%20Automated-red.svg?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Pytest](https://img.shields.io/badge/Pytest-7%20Passed-0A9EDC.svg?logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Evidently AI](https://img.shields.io/badge/Evidently%20AI-Data%20Drift%20Monitoring-purple.svg)](https://www.evidentlyai.com/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Internal--POE--MLDevOps-success.svg?logo=github&logoColor=white)](https://github.com/pankajcseaiml/Internal-POE-MLDevOps)
 
-An end-to-end beginner MLOps/DevOps project demonstrating modular application development (`hello.py`), VS Code workspace configuration, GitHub version control, Jenkins declarative CI/CD automation, MLflow experiment tracking & model logging, Docker containerization with a lightweight base image, Pytest unit testing, and Evidently AI data drift and model quality monitoring.
+An end-to-end production MLOps/DevOps project based on the problem statement:
+> **"Write a Python program to accept two numbers and display its Multiplication. Integrate this program using FastAPI, Jenkins, Pytest, Evidently tool."**
 
 **GitHub Repository:** [https://github.com/pankajcseaiml/Internal-POE-MLDevOps](https://github.com/pankajcseaiml/Internal-POE-MLDevOps)
 
 ---
 
-## 📁 Clean Project Structure
+## 📁 Project Architecture & Structure
 
 ```text
-Internal POE/
+Internal-POE-MLDevOps/
 ├── .vscode/
 │   ├── settings.json            # VS Code workspace settings & pytest test discovery
-│   └── launch.json              # VS Code debug & run configurations
+│   └── launch.json              # 1-click debug/run profiles (CLI, FastAPI, Pytest, Evidently)
 ├── tests/
-│   └── test_hello.py            # Pytest test cases (Step 11 & MLflow test)
-├── Dockerfile                   # Lightweight Python container image (Steps 9 & 10)
-├── hello.py                     # Single-file core application (Step 2)
-├── train_and_track_mlflow.py    # MLflow experiment tracking & model logging
-├── evidently_monitor.py         # Evidently AI drift and quality monitoring (Step 12)
-├── Jenkinsfile                  # Declarative Jenkins CI/CD automation (Steps 5, 6, 7)
-├── requirements.txt             # Production dependencies (MLflow, Evidently, Pytest)
-├── .gitignore                   # Clean Git exclusion rules
-└── README.md                    # Complete documentation & execution guide
+│   ├── test_multiplication.py   # Comprehensive Pytest suite (Core logic & FastAPI endpoints)
+│   └── test_hello.py            # Entrypoint integration test
+├── main.py                      # Core Python program & FastAPI application
+├── hello.py                     # CLI module and default executable entrypoint
+├── evidently_monitor.py         # Evidently AI data drift and data quality monitoring
+├── Dockerfile                   # Lightweight Docker containerization (python:3.11-slim)
+├── Jenkinsfile                  # Jenkins declarative CI/CD pipeline automation
+├── requirements.txt             # Production dependencies
+├── .gitignore                   # Clean Git ignore configuration
+└── README.md                    # Complete technical documentation
 ```
 
 ---
 
-## 🔄 Architecture & CI/CD Pipeline
+## 🔄 End-to-End Workflow Diagram
 
 ```
-┌─────────────┐       ┌──────────────┐       ┌─────────────────┐
-│  hello.py   │ ────> │  Git/GitHub  │ ────> │ Jenkins (CI/CD) │
-└─────────────┘       └──────────────┘       └────────┬────────┘
-                                                      │
-         ┌───────────────────┬────────────────────────┼─────────────────────┐
-         ▼                   ▼                        ▼                     ▼
- ┌───────────────┐   ┌─────────────────┐   ┌──────────────────────┐  ┌────────────────┐
- │ Pytest Suite  │   │ MLflow Tracking │   │ Evidently Monitoring │  │ Docker Build   │
- │ (Unit verify) │   │ (Metrics/Model) │   │ (Drift & Summary)    │  │ & Run Container│
- └───────────────┘   └─────────────────┘   └──────────────────────┘  └────────────────┘
+┌─────────────────────────────────┐
+│     Multiplication Program      │
+│  (CLI: python main.py <n1> <n2> │
+│   API: GET/POST /multiply)      │
+└────────────────┬────────────────┘
+                 │
+                 ▼
+     ┌──────────────────────┐
+     │  Git / GitHub Repo   │
+     └───────────┬──────────┘
+                 │ (Triggers)
+                 ▼
+┌─────────────────────────────────┐
+│     Jenkins Declarative CI/CD   │
+└────────────────┬────────────────┘
+                 │
+                 ├─────────────────────────┐
+                 │                         │
+                 ▼                         ▼
+      ┌─────────────────────┐   ┌────────────────────────┐
+      │     Pytest Suite    │   │  Evidently AI Monitor  │
+      │  (7 Unit/API Tests) │   │ (Data Drift & Quality) │
+      └─────────────────────┘   └────────────────────────┘
+                 │                         │
+                 └────────────┬────────────┘
+                              │
+                              ▼
+                 ┌─────────────────────────┐
+                 │     Docker Container    │
+                 │   (Build & Run Image)   │
+                 └─────────────────────────┘
 ```
 
 ---
 
-## 📋 Step-by-Step Assignment Walkthrough
+## 🚀 Step-by-Step Execution Guide (CMD)
 
-### Step 2: Very Simple Single-File Application (`hello.py`)
-Modular Python application returning and printing the expected message:
-```python
-# hello.py
-def get_message() -> str:
-    """Return the welcome message."""
-    return "Hello MLOps"
-
-def main():
-    """Print the welcome message for the project."""
-    message = get_message()
-    print(message)
-
-if __name__ == "__main__":
-    main()
-```
-**Run in CMD:**
+### 1️⃣ Run Core Python Multiplication Program (CLI)
+You can provide two numbers directly as arguments or interactively:
 ```cmd
-python hello.py
+python main.py 7 8
 ```
-*Output:*
+**Output:**
 ```text
-Hello MLOps
+==================================================
+       Python Multiplication Program (CLI)        
+==================================================
+--------------------------------------------------
+Calculation: 7.0 x 8.0 = 56.0
+Multiplication Result: 56.0
+==================================================
 ```
 
 ---
 
-### Step 3: Create Project in VS Code
-The workspace includes `.vscode` configurations:
-* [`.vscode/settings.json`](.vscode/settings.json): Enables `pytest` auto-discovery in `tests/`.
-* [`.vscode/launch.json`](.vscode/launch.json): 1-click debug/run configurations for `hello.py`, `pytest`, and `evidently_monitor.py`.
-
-**Run in CMD:**
+### 2️⃣ Run FastAPI Web Service
+Start the FastAPI server using Uvicorn:
 ```cmd
-code .
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
+Once started, test the endpoints in your browser or with `curl`:
+* **Swagger Interactive Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
+* **GET Multiplication Endpoint:**  
+  ```cmd
+  curl "http://localhost:8000/multiply?num1=12.5&num2=4"
+  ```
+  *Response:* `{"num1": 12.5, "num2": 4.0, "operation": "multiplication", "result": 50.0}`
+* **POST Multiplication Endpoint:**  
+  ```cmd
+  curl -X POST "http://localhost:8000/multiply" -H "Content-Type: application/json" -d "{\"num1\": 9.0, \"num2\": 8.0}"
+  ```
+  *Response:* `{"num1": 9.0, "num2": 8.0, "operation": "multiplication", "result": 72.0}`
 
 ---
 
-### Step 4: Push Project Structure to Git
-Initialize Git, track files, and push to GitHub:
+### 3️⃣ Run Automated Pytest Suite
+Run the 7 unit and API integration tests:
 ```cmd
-git status
-git add .
-git commit -m "feat: complete MLOps project pipeline structure"
-git branch -M main
-git remote add origin https://github.com/pankajcseaiml/Internal-POE-MLDevOps.git
-git push -u origin main
+python -m pytest -p no:dash -v -s tests/
 ```
-
----
-
-### Step 5: Install & Configure Jenkins
-1. Jenkins is installed locally on Windows and accessible at:
-   ```text
-   http://localhost:8081
-   ```
-   *(Port `8081` is configured to avoid conflicts with Steam's web helper on port `8080`).*
-2. Jenkins plugins configured:
-   * **Git Plugin**
-   * **Pipeline Plugin**
-   * **Windows Batch Plugin**
-
-**Test Jenkins in CMD:**
-```cmd
-curl -I http://localhost:8081
-start http://localhost:8081
-```
-
----
-
-### Step 6: Pull the Code from GitHub in Jenkins
-In the Jenkins Web UI:
-1. Click **New Item** ➔ Enter name `Internal-POE-MLDevOps` ➔ Select **Pipeline** ➔ Click **OK**.
-2. Scroll to the **Pipeline** section at the bottom:
-   * **Definition**: Select `Pipeline script from SCM`
-   * **SCM**: Select `Git`
-   * **Repository URL**: `https://github.com/pankajcseaiml/Internal-POE-MLDevOps.git`
-   * **Branch Specifier**: `*/main`
-   * **Script Path**: `Jenkinsfile`
-3. Click **Save**.
-
----
-
-### Step 7: Run Jenkins Pipeline
-1. On the `Internal-POE-MLDevOps` page, click **Build Now**.
-2. Click on the build number ➔ **Console Output**.
-3. All stages execute automatically:
-   * **Checkout Code:** Fetches latest commit from GitHub.
-   * **Install Dependencies:** Installs packages from `requirements.txt`.
-   * **Run Pytest:** Executes test suite with `-p no:dash`.
-   * **Evidently AI Monitoring:** Generates data drift report.
-   * **Docker Build and Run:** Builds and executes the container.
-   * **Post Action:** Archives `evidently_report.html` as a build artifact.
-
----
-
-### Step 8: Install & Verify Docker
-Docker Desktop with the WSL 2 backend is installed on Windows:
-```cmd
-docker --version
-docker ps
-```
-*Output:*
+**Output:**
 ```text
-Docker version 29.8.2
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+tests/test_hello.py::test_hello_multiplication PASSED
+tests/test_multiplication.py::test_core_multiplication_positive PASSED
+tests/test_multiplication.py::test_core_multiplication_negative_and_zero PASSED
+tests/test_multiplication.py::test_fastapi_root_endpoint PASSED
+tests/test_multiplication.py::test_fastapi_get_multiply PASSED
+tests/test_multiplication.py::test_fastapi_post_multiply PASSED
+tests/test_multiplication.py::test_fastapi_invalid_input PASSED
+============================== 7 passed in 0.42s ==============================
 ```
 
 ---
 
-### Step 9: Pull Lightweight Python Docker Image
-Pulls `python:3.11-slim` (~50 MB compressed vs > 300 MB standard image):
+### 4️⃣ Run Evidently AI Monitoring Tool
+Monitors incoming multiplication request distributions (`num1`, `num2`, and `multiplication_result`) between baseline traffic and live production traffic to detect data drift:
 ```cmd
-docker pull python:3.11-slim
+python evidently_monitor.py
+start evidently_report.html
 ```
+**Output:**
+```text
+==================================================
+  Evidently AI Tool - Multiplication Monitoring   
+==================================================
+[INFO] Reference operations: 200 requests (Columns: ['num1', 'num2', 'multiplication_result'])
+[INFO] Current production operations: 200 requests
+[INFO] Baseline average product:   630.01
+[INFO] Production average product: 13559.91
+[INFO] Computing Data Drift and Data Summary metrics...
+[SUCCESS] Evidently report generated successfully: evidently_report.html
+```
+*Opens an interactive visual dashboard in your browser displaying distribution curves, p-values, and statistical drift tests!*
 
 ---
 
-### Step 10: Add `hello.py` to Docker (Build & Run Container)
-Defined in [`Dockerfile`](Dockerfile):
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY hello.py .
-CMD ["python", "hello.py"]
-```
+### 5️⃣ Jenkins CI/CD Automation
+The [`Jenkinsfile`](Jenkinsfile) automates the entire lifecycle:
+1. **Checkout Code:** Pulls latest commit from GitHub repository.
+2. **Install Dependencies:** Installs FastAPI, Uvicorn, Pytest, and Evidently.
+3. **Run Pytest:** Executes all unit and API endpoint tests.
+4. **Evidently AI Monitoring:** Generates data drift report for multiplication requests.
+5. **Docker Build & Run:** Builds and validates the container image.
+6. **Artifact Archival:** Archives `evidently_report.html`.
 
-**Build Image:**
+**Trigger Pipeline in Jenkins:**
+1. Open [http://localhost:8081](http://localhost:8081).
+2. Open job `Internal-POE-MLDevOps` ➔ Click **Build Now**.
+3. Inspect the automated stages in **Console Output**.
+
+---
+
+### 6️⃣ Docker Containerization
+Build the lightweight Docker container:
 ```cmd
 docker build -t hello-mlops:latest .
 ```
-
-**Run Container:**
+Run the container:
 ```cmd
 docker run --rm hello-mlops:latest
 ```
 *Output:*
 ```text
-Hello MLOps
+Multiplication of 6.0 and 7.0 is: 42.0
 ```
+Run as a live FastAPI server in Docker:
+```cmd
+docker run -p 8000:8000 --rm hello-mlops:latest uvicorn main:app --host 0.0.0.0 --port 8000
+```
+*(Now accessible at [http://localhost:8000/docs](http://localhost:8000/docs))*.
 
 ---
 
-### Step 11: Configure Pytest and Print Test Cases
-Test file located at [`tests/test_hello.py`](tests/test_hello.py):
-1. **`test_hello_mlops_message`:** Verifies `hello.py` logic and stdout.
-2. **`test_mlflow_training_and_tracking`:** Verifies MLflow model training, metric computation, and artifact logging.
+## 📊 Summary Checklist
 
-**Run in CMD:**
-```cmd
-python -m pytest -p no:dash -v -s tests/test_hello.py
-```
-*Output:*
-```text
-tests/test_hello.py::test_hello_mlops_message PASSED
-tests/test_hello.py::test_mlflow_training_and_tracking PASSED
-============================== 2 passed in 0.82s ==============================
-```
-
----
-
-### Step 11b: MLflow Model Training & Experiment Tracking
-Configured in [`train_and_track_mlflow.py`](train_and_track_mlflow.py):
-* Trains a Ridge Regression baseline model on the Diabetes dataset.
-* Automatically logs hyperparameters (`alpha`, `model_type`, `test_size`).
-* Automatically logs evaluation metrics (`mse`, `rmse`, `mae`, `r2_score`).
-* Logs the trained model artifact to MLflow.
-
-**Run in CMD:**
-```cmd
-python train_and_track_mlflow.py
-```
-
-**Launch MLflow Web UI:**
-```cmd
-mlflow ui
-start http://localhost:5000
-```
-
----
-
-### Step 12: Configure Evidently Tool & Monitor
-Configured in [`evidently_monitor.py`](evidently_monitor.py) using the standard **Diabetes Disease Progression Dataset** from `scikit-learn` (`sklearn.datasets.load_diabetes`):
-1. Loads 442 patient records with 10 physiological and biomarker diagnostic features: `age`, `sex`, `bmi`, `bp`, and 6 blood serum measurements (`s1` - `s6`), along with quantitative disease progression (`target`).
-2. Splits into baseline reference cohort (221 patients) and incoming production cohort (221 patients).
-3. Evaluates **Data Drift** and **Data Summary** metric presets using Evidently AI.
-4. Generates an interactive visual HTML dashboard: `evidently_report.html`.
-
-**Run in CMD:**
-```cmd
-python evidently_monitor.py
-```
-*Output:*
-```text
-==================================================
-  Evidently AI Tool - Disease Data Monitoring     
-  Dataset: Scikit-Learn Diabetes Progression      
-==================================================
-[INFO] Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'target']
-[INFO] Reference cohort (baseline): 221 patient records
-[INFO] Current cohort (production): 221 patient records
-[INFO] Computing Data Drift and Data Summary metrics...
-[SUCCESS] Evidently report generated successfully: evidently_report.html
-[REPORT LOCATION] C:\Users\Pankaj\Documents\Internal POE\evidently_report.html
-==================================================
-```
-
-**Open in Browser:**
-```cmd
-start evidently_report.html
-```
-
----
-
-## 🛠️ Verification & Tech Stack
-
-| Step | Tool / Technology | Status | Output / Link |
+| Component | Implementation | Verification | Status |
 | :--- | :--- | :--- | :--- |
-| **2** | Python 3 | ✅ Verified | `Hello MLOps` |
-| **3** | VS Code | ✅ Configured | `.vscode/settings.json`, `.vscode/launch.json` |
-| **4** | Git / GitHub | ✅ Verified | [Internal-POE-MLDevOps](https://github.com/pankajcseaiml/Internal-POE-MLDevOps) |
-| **5** | Jenkins Service | ✅ Running | `http://localhost:8081` |
-| **6** | Jenkins SCM Pull | ✅ Verified | GitHub webhook / Git SCM polling |
-| **7** | Jenkins Pipeline | ✅ Verified | `Jenkinsfile` automated stages |
-| **8** | Docker Engine | ✅ Running | Docker Desktop (WSL 2) |
-| **9** | Docker Hub | ✅ Verified | `python:3.11-slim` |
-| **10** | Docker Container | ✅ Verified | `hello-mlops:latest` |
-| **11** | Pytest | ✅ Passed | 1/1 test passed (`test_hello.py`) |
-| **12** | Evidently AI | ✅ Generated | `evidently_report.html` interactive dashboard |
+| **Multiplication Logic** | `multiply(a, b)` in `main.py` & `hello.py` | CLI & function return | ✅ Verified |
+| **FastAPI** | REST API (`/`, `GET /multiply`, `POST /multiply`) | Swagger Docs & TestClient | ✅ Verified |
+| **Pytest** | 7 tests in `tests/test_multiplication.py` & `tests/test_hello.py` | `pytest -v` | ✅ 7/7 Passed |
+| **Evidently AI** | Input & Output Drift Analysis in `evidently_monitor.py` | `evidently_report.html` | ✅ Verified |
+| **Jenkins** | Declarative pipeline in `Jenkinsfile` | Automated multi-stage build | ✅ Configured |
+| **Docker** | Containerized FastAPI & CLI app in `Dockerfile` | Image build & container run | ✅ Verified |

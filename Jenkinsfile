@@ -9,35 +9,28 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo 'Pulling code from GitHub repository: https://github.com/pankajcseaiml/Internal-POE-MLDevOps'
+                echo 'Pulling Multiplication project from GitHub repository...'
                 git branch: 'main', url: 'https://github.com/pankajcseaiml/Internal-POE-MLDevOps.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing required Python dependencies...'
+                echo 'Installing required Python packages (FastAPI, Uvicorn, Pytest, Evidently)...'
                 bat 'python -m pip install -r requirements.txt'
             }
         }
 
         stage('Run Pytest') {
             steps {
-                echo 'Running Pytest test cases...'
-                bat 'python -m pytest -p no:dash -v -s tests/test_hello.py'
-            }
-        }
-
-        stage('MLflow Experiment Tracking') {
-            steps {
-                echo 'Training baseline model and logging metrics & artifacts to MLflow...'
-                bat 'python train_and_track_mlflow.py'
+                echo 'Running Pytest test cases for Multiplication logic and FastAPI endpoints...'
+                bat 'python -m pytest -p no:dash -v -s tests/'
             }
         }
 
         stage('Evidently AI Monitoring') {
             steps {
-                echo 'Running Evidently monitoring for Data Drift and Quality...'
+                echo 'Running Evidently AI data drift and data quality monitoring on Multiplication requests...'
                 bat 'python evidently_monitor.py evidently_report.html'
             }
         }
@@ -45,7 +38,7 @@ pipeline {
         stage('Docker Build and Run') {
             steps {
                 script {
-                    echo 'Building and running lightweight Python Docker image...'
+                    echo 'Building and testing Docker container for Multiplication app...'
                     catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                         bat 'docker build -t hello-mlops:latest .'
                         bat 'docker run --rm hello-mlops:latest'
@@ -61,7 +54,7 @@ pipeline {
             archiveArtifacts artifacts: 'evidently_report.html', allowEmptyArchive: true
         }
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Multiplication CI/CD Pipeline completed successfully!'
         }
     }
 }

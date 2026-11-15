@@ -12,6 +12,8 @@ htmlcov/
 # MLflow tracking runs & artifacts
 mlruns/
 mlartifacts/
+*.db
+mlflow.db
 
 # Virtual environments
 venv/
